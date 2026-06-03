@@ -1,0 +1,25 @@
+# Install with: pip install -e ".[dev]"
+# Or for production: pip install -e .
+#
+# Quick install (no editable):
+langgraph>=0.2.0
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+openai>=1.50.0
+yfinance>=0.2.44
+requests>=2.31.0
+httpx>=0.27.0
+pandas>=2.1.0
+numpy>=1.26.0
+ta>=0.11.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+python-dotenv>=1.0.0
+vectorbt>=0.26.1
+streamlit>=1.38.0
+plotly>=5.20.0
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9
+alembic>=1.13.0
+rich>=13.7.0
+tenacity>=8.2.0
