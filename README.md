@@ -4,7 +4,7 @@
 
 Two execution modes: a **static LangGraph graph** (all agents run in parallel, deterministic) and a **dynamic MCP agent** (Claude iteratively decides which tools to call and in what order, adaptive per ticker).
 
-> Live demo: [warren-brain.streamlit.app](https://warren-brain.streamlit.app) ← *(add your Streamlit Cloud URL here)*
+> **[Live Demo →](https://market-intelligence-agent-7phchpsgycqdo4thnastb7.streamlit.app)**
 
 ---
 
