@@ -5,6 +5,7 @@
 Two execution modes: a **static LangGraph graph** (all agents run in parallel, deterministic) and a **dynamic MCP agent** (Claude iteratively decides which tools to call and in what order, adaptive per ticker).
 
 > **[Live Demo →](https://market-intelligence-agent-7phchpsgycqdo4thnastb7.streamlit.app)**
+> *(Demo requires a live Anthropic API key — if the app shows an error, run it locally following the instructions below.)*
 
 ---
 
