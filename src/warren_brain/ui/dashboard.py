@@ -32,7 +32,12 @@ def _check_secrets():
     """Show a clear error and stop if required API keys are missing."""
     import os
     def _get(key: str) -> str:
-        return os.environ.get(key, "") or st.secrets.get(key, "") if hasattr(st, "secrets") else os.environ.get(key, "")
+        if val := os.environ.get(key, ""):
+            return val
+        try:
+            return st.secrets.get(key, "") or ""
+        except Exception:
+            return ""
 
     llm_provider = _get("LLM_PROVIDER") or "anthropic"
     if llm_provider == "anthropic":
