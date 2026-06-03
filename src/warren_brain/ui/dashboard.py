@@ -30,34 +30,23 @@ st.set_page_config(
 
 def _check_secrets():
     """Show a clear error and stop if required API keys are missing."""
-    import os
-    def _get(key: str) -> str:
-        if val := os.environ.get(key, ""):
-            return val
-        try:
-            return st.secrets.get(key, "") or ""
-        except Exception:
-            return ""
+    from warren_brain.config import settings
+    from warren_brain.llm import _secret
 
-    llm_provider = _get("LLM_PROVIDER") or "anthropic"
-    if llm_provider == "anthropic":
-        if not _get("ANTHROPIC_API_KEY"):
+    provider = settings.llm_provider or "anthropic"
+    if provider == "anthropic":
+        if not _secret("ANTHROPIC_API_KEY", settings.anthropic_api_key):
             st.error(
                 "**Missing ANTHROPIC_API_KEY.** "
-                "Go to **Manage app → Settings → Secrets** and add:\n\n"
-                "```toml\n"
-                'LLM_PROVIDER = "anthropic"\n'
-                'ANTHROPIC_API_KEY = "sk-ant-..."\n'
-                'ANTHROPIC_BASE_URL = "https://www.dataexpert.io/api/v1/anthropic"\n'
-                'ANTHROPIC_MODEL = "claude-sonnet-4-6"\n'
-                "```"
+                "Go to **Manage app → Settings → Secrets** and add your key. "
+                "See the README for the required format."
             )
             st.stop()
     else:
-        if not _get("OPENAI_API_KEY"):
+        if not _secret("OPENAI_API_KEY", settings.openai_api_key):
             st.error(
                 "**Missing OPENAI_API_KEY.** "
-                "Go to **Manage app → Settings → Secrets** and add your OpenAI key."
+                "Go to **Manage app → Settings → Secrets** and add your key."
             )
             st.stop()
 
