@@ -1,5 +1,5 @@
-# Installs this package + all dependencies
-.
+# Installs this package in editable mode so code changes always take effect
+-e .
 
 langgraph>=0.2.0
 langchain-openai>=0.2.0

@@ -28,7 +28,37 @@ st.set_page_config(
 )
 
 
+def _check_secrets():
+    """Show a clear error and stop if required API keys are missing."""
+    import os
+    def _get(key: str) -> str:
+        return os.environ.get(key, "") or st.secrets.get(key, "") if hasattr(st, "secrets") else os.environ.get(key, "")
+
+    llm_provider = _get("LLM_PROVIDER") or "anthropic"
+    if llm_provider == "anthropic":
+        if not _get("ANTHROPIC_API_KEY"):
+            st.error(
+                "**Missing ANTHROPIC_API_KEY.** "
+                "Go to **Manage app → Settings → Secrets** and add:\n\n"
+                "```toml\n"
+                'LLM_PROVIDER = "anthropic"\n'
+                'ANTHROPIC_API_KEY = "sk-ant-..."\n'
+                'ANTHROPIC_BASE_URL = "https://www.dataexpert.io/api/v1/anthropic"\n'
+                'ANTHROPIC_MODEL = "claude-sonnet-4-6"\n'
+                "```"
+            )
+            st.stop()
+    else:
+        if not _get("OPENAI_API_KEY"):
+            st.error(
+                "**Missing OPENAI_API_KEY.** "
+                "Go to **Manage app → Settings → Secrets** and add your OpenAI key."
+            )
+            st.stop()
+
+
 def main():
+    _check_secrets()
     st.title("🧠 Warren Brain — Agentic Investment Intelligence")
     st.caption("Buffett-style multi-agent stock analysis powered by Claude + LangGraph")
 
