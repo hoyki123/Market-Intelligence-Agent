@@ -6,16 +6,33 @@ Anthropic proxy uses the standard Anthropic SDK messages API.
 
 from __future__ import annotations
 
+import os
+
 from warren_brain.config import settings
+
+
+def _secret(env_key: str, settings_value: str) -> str:
+    """Return settings value, then OS env, then st.secrets — handles Streamlit Cloud."""
+    if settings_value:
+        return settings_value
+    if val := os.environ.get(env_key, ""):
+        return val
+    try:
+        import streamlit as st
+        return st.secrets.get(env_key, "") or ""
+    except Exception:
+        return ""
 
 
 # ── OpenAI ───────────────────────────────────────────────────────────────────
 
 def _get_openai_client():
     from openai import OpenAI
-    kwargs: dict = {"api_key": settings.openai_api_key}
-    if settings.openai_base_url:
-        kwargs["base_url"] = settings.openai_base_url
+    api_key = _secret("OPENAI_API_KEY", settings.openai_api_key)
+    base_url = _secret("OPENAI_BASE_URL", settings.openai_base_url)
+    kwargs: dict = {"api_key": api_key or None}
+    if base_url:
+        kwargs["base_url"] = base_url
         kwargs["default_headers"] = {"x-session-id": "warren-brain"}
     return OpenAI(**kwargs)
 
@@ -48,12 +65,14 @@ def _complete_openai(
 
 def _get_anthropic_client():
     from anthropic import Anthropic
+    api_key = _secret("ANTHROPIC_API_KEY", settings.anthropic_api_key)
+    base_url = _secret("ANTHROPIC_BASE_URL", settings.anthropic_base_url)
     kwargs: dict = {
-        "api_key": settings.anthropic_api_key,
+        "api_key": api_key or None,
         "default_headers": {"x-session-id": "warren-brain"},
     }
-    if settings.anthropic_base_url:
-        kwargs["base_url"] = settings.anthropic_base_url
+    if base_url:
+        kwargs["base_url"] = base_url
     return Anthropic(**kwargs)
 
 
